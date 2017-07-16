@@ -45,12 +45,16 @@ def get_random_article():
     return sample(text, 1)[0].strip()
 
 
-def main():
+def tweet_a_random_article():
     last_id = None
     for t in tweetsplit(get_random_article()):
         print(t)
         status = tweet(t, in_reply_to_status_id=last_id)
         last_id = status.id
+
+
+def main():
+    tweet_a_random_article()
 
 
 if __name__ == '__main__':
