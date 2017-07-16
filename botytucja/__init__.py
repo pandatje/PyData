@@ -1,0 +1,1 @@
+from .botytucja import tweet_a_random_article

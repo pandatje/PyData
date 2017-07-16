@@ -2,7 +2,7 @@ import os
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 
-from tweet import tweet_a_random_article
+from botytucja import tweet_a_random_article
 
 
 TWEET_INTERVAL_MINUTES = os.environ.get('TWEET_INTERVAL_MINUTES', 60 * 6)
