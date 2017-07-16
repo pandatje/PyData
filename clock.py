@@ -5,7 +5,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from botytucja import tweet_a_random_article
 
 
-TWEET_INTERVAL_MINUTES = os.environ.get('TWEET_INTERVAL_MINUTES', 60 * 6)
+TWEET_INTERVAL_MINUTES = int(os.environ.get('TWEET_INTERVAL_MINUTES', 60 * 6))
 
 
 sched = BlockingScheduler()
