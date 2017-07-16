@@ -53,9 +53,5 @@ def tweet_a_random_article():
         last_id = status.id
 
 
-def main():
-    tweet_a_random_article()
-
-
 if __name__ == '__main__':
-    main()
+    tweet_a_random_article()

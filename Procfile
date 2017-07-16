@@ -1,1 +1,1 @@
-worker: python tweet.py --access-logfile - --error-logfile - --log-file - --log-level info
+clock: python clock.py --access-logfile - --error-logfile - --log-file - --log-level info
