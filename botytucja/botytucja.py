@@ -6,6 +6,8 @@ from collections import deque
 
 import tweepy
 
+from .listeners import FollowStreamListener
+
 
 MAX_TWEET = 280
 TWITTER_CONSUMER_KEY = os.environ.get('TWITTER_CONSUMER_KEY', None)
@@ -32,27 +34,57 @@ def tweetsplit(text):
     return tweets
 
 
-def tweet(text, in_reply_to_status_id=None):
+def get_api():
     auth = tweepy.OAuthHandler(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET)
     auth.set_access_token(TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET)
-    api = tweepy.API(auth)
-    return api.update_status(text, in_reply_to_status_id=in_reply_to_status_id)
+    return tweepy.API(auth)
 
 
 def get_random_article():
-    with open('constitution.json', 'rt') as f:
+    with open('data/konstytucja.json', 'rt') as f:
         articles = json.loads(f.read())['artykuły']
     number, text = sample(articles.items(), 1)[0]
     return f'Art. {number}. {text}'
 
 
+def tweet(text, in_reply_to_status_id=None, api=None):
+    if api is None:
+        api = get_api()
+    return api.update_status(text, in_reply_to_status_id=in_reply_to_status_id)
+
+
 def tweet_a_random_article():
+    api = get_api()
     last_id = None
     for t in tweetsplit(get_random_article()):
         print(t)
-        status = tweet(t, in_reply_to_status_id=last_id)
+        status = tweet(t, in_reply_to_status_id=last_id, api=api)
         last_id = status.id
 
 
+def get_user_id(handle):
+    api = get_api()
+    id_str = api.get_user(screen_name=handle).id_str
+    print(f'{id_str} : {handle}')
+    return id_str
+
+
+def get_user_ids():
+    with open('data/users.json') as f:
+        users = json.loads(f.read())
+    return users.keys()
+
+
+def follow():
+    api = get_api()
+
+    stream_listener = FollowStreamListener()
+    stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
+
+    user_ids = get_user_ids()
+    print(f'following {user_ids}')
+    stream.filter(follow=user_ids, async=True)
+
+
 if __name__ == '__main__':
-    tweet_a_random_article()
+    follow()
