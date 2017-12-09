@@ -6,7 +6,7 @@ from collections import deque
 import tweepy
 
 
-MAX_TWEET = 140
+MAX_TWEET = 280
 TWITTER_CONSUMER_KEY = os.environ.get('TWITTER_CONSUMER_KEY', None)
 TWITTER_CONSUMER_SECRET = os.environ.get('TWITTER_CONSUMER_SECRET', None)
 TWITTER_ACCESS_TOKEN = os.environ.get('TWITTER_ACCESS_TOKEN', None)
@@ -20,7 +20,7 @@ def tweetsplit(text):
 
     while not done:
         tweet = ''
-        while words and len(tweet) + len(words[0]) + 1 <= 137:
+        while words and len(tweet) + len(words[0]) + 1 <= (MAX_TWEET - 3):
             tweet += words.popleft() + ' '
             if not words:
                 done = True
