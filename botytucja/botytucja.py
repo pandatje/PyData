@@ -1,4 +1,5 @@
 import os
+import json
 from pprint import pprint
 from random import sample
 from collections import deque
@@ -39,10 +40,10 @@ def tweet(text, in_reply_to_status_id=None):
 
 
 def get_random_article():
-    with open('constitution.txt', 'rt') as f:
-        text = f.read()
-    text = text.split('Art.')[1:]
-    return sample(text, 1)[0].strip()
+    with open('constitution.json', 'rt') as f:
+        articles = json.loads(f.read())['artykuły']
+    number, text = sample(articles.items(), 1)[0]
+    return f'Art. {number}. {text}'
 
 
 def tweet_a_random_article():
