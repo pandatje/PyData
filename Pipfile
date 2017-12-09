@@ -11,6 +11,9 @@ apscheduler = "*"
 "beautifulsoup4" = "*"
 requests = "*"
 tweepy = "*"
+nltk = "*"
+gensim = "*"
+numpy = "*"
 
 
 [dev-packages]
