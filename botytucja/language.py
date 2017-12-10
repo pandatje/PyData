@@ -44,20 +44,19 @@ def tokenize_articles(articles):
     return gen_docs
 
 
+# procumpute stuff
+with open('data/konstytucja.json', 'rt') as f:
+    articles = json.loads(f.read())[u'artykuły']
+articles = OrderedDict(sorted(articles.items()))
+articles_lemmatized = [lemmatize(article) for article in list(articles.values())]
+gen_docs = tokenize_articles(articles_lemmatized)
+dictionary = gensim.corpora.Dictionary(gen_docs)
+corpus = [dictionary.doc2bow(gen_doc) for gen_doc in gen_docs]
+tf_idf = gensim.models.TfidfModel(corpus)
+sims = gensim.similarities.Similarity('.', tf_idf[corpus], num_features=len(dictionary))
+
+
 def find_most_similar(text):
-    with open('data/konstytucja.json', 'rt') as f:
-        articles = json.loads(f.read())[u'artykuły']
-    articles = OrderedDict(sorted(articles.items()))
-    articles_lemmatized = [lemmatize(article) for article in list(articles.values())]
-    gen_docs = tokenize_articles(articles_lemmatized)
-    dictionary = gensim.corpora.Dictionary(gen_docs)
-
-    corpus = [dictionary.doc2bow(gen_doc) for gen_doc in gen_docs]
-
-    tf_idf = gensim.models.TfidfModel(corpus)
-
-    sims = gensim.similarities.Similarity('.', tf_idf[corpus], num_features=len(dictionary))
-
     text_lemmatized = lemmatize(text)
     query_doc = [w.lower() for w in word_tokenize(text_lemmatized)]
     query_doc_bow = dictionary.doc2bow(query_doc)
